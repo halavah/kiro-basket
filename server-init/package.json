@@ -1,0 +1,22 @@
+{
+  "name": "chapter03-database-init",
+  "version": "1.0.0",
+  "description": "社区团购管理平台 - 数据库初始化脚本",
+  "main": "server-init.js",
+  "scripts": {
+    "init": "node server-init.js"
+  },
+  "keywords": [
+    "mysql",
+    "mongodb",
+    "database",
+    "init"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mysql2": "^3.6.5",
+    "mongodb": "^6.3.0",
+    "dotenv": "^16.3.1"
+  }
+}

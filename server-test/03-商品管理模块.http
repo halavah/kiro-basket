@@ -1,0 +1,119 @@
+### 环境变量
+@baseUrl = http://localhost:3000/api
+@captainToken = YOUR_CAPTAIN_TOKEN_HERE
+@residentToken = YOUR_RESIDENT_TOKEN_HERE
+
+###############################################
+# 三、商品管理模块 (Product)
+###############################################
+
+### 3.1 获取商品列表（团长端）
+GET {{baseUrl}}/captain/products?page=1&pageSize=10
+Authorization: Bearer {{captainToken}}
+
+### 3.1.1 获取商品列表 - 按分类筛选
+GET {{baseUrl}}/captain/products?page=1&pageSize=10&category_id=1
+Authorization: Bearer {{captainToken}}
+
+### 3.1.2 获取商品列表 - 按状态筛选
+GET {{baseUrl}}/captain/products?page=1&pageSize=10&status=1
+Authorization: Bearer {{captainToken}}
+
+### 3.1.3 获取商品列表 - 关键词搜索
+GET {{baseUrl}}/captain/products?page=1&pageSize=10&keyword=苹果
+Authorization: Bearer {{captainToken}}
+
+### 3.2 获取商品列表（居民端）
+GET {{baseUrl}}/resident/products?page=1&pageSize=12
+Authorization: Bearer {{residentToken}}
+
+### 3.3 获取商品详情（团长端）
+GET {{baseUrl}}/captain/products/1
+Authorization: Bearer {{captainToken}}
+
+### 3.4 获取商品详情（居民端）
+GET {{baseUrl}}/resident/products/1
+Authorization: Bearer {{residentToken}}
+
+### 3.4.1 搜索商品（居民端）
+# 注意：搜索功能通过 /products 接口的 keyword 参数实现
+GET {{baseUrl}}/resident/products?keyword=苹果&page=1&pageSize=10
+Authorization: Bearer {{residentToken}}
+
+### 3.4.2 搜索商品 - 专用接口（居民端）
+# 如果后端实现了专用搜索接口，可使用此路径
+GET {{baseUrl}}/resident/products/search?keyword=香蕉&page=1&pageSize=10
+Authorization: Bearer {{residentToken}}
+
+### 3.5 创建商品
+# 注意：图片上传需要使用 multipart/form-data
+# 在实际测试时，建议使用 Postman 或先上传图片
+POST {{baseUrl}}/captain/products
+Authorization: Bearer {{captainToken}}
+Content-Type: application/json
+
+{
+  "category_id": 1,
+  "name": "测试商品",
+  "price": 9.99,
+  "original_price": 15.99,
+  "stock": 100,
+  "image": "/uploads/test.jpg",
+  "description": "这是一个测试商品",
+  "commission_rate": 0.10,
+  "stock_alert": 10,
+  "status": 1
+}
+
+### 3.6 更新商品
+PUT {{baseUrl}}/captain/products/1
+Authorization: Bearer {{captainToken}}
+Content-Type: application/json
+
+{
+  "name": "更新后的商品名称",
+  "price": 6.99,
+  "stock": 150
+}
+
+### 3.7 删除商品
+DELETE {{baseUrl}}/captain/products/20
+Authorization: Bearer {{captainToken}}
+
+### 3.8 上架商品
+PATCH {{baseUrl}}/captain/products/1/status
+Authorization: Bearer {{captainToken}}
+Content-Type: application/json
+
+{
+  "status": 1
+}
+
+### 3.8.1 下架商品
+PATCH {{baseUrl}}/captain/products/1/status
+Authorization: Bearer {{captainToken}}
+Content-Type: application/json
+
+{
+  "status": 0
+}
+
+### 3.9 增加库存
+PATCH {{baseUrl}}/captain/products/1/stock
+Authorization: Bearer {{captainToken}}
+Content-Type: application/json
+
+{
+  "change_type": "add",
+  "quantity": 50
+}
+
+### 3.9.1 减少库存
+PATCH {{baseUrl}}/captain/products/1/stock
+Authorization: Bearer {{captainToken}}
+Content-Type: application/json
+
+{
+  "change_type": "reduce",
+  "quantity": 10
+}

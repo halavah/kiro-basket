@@ -1,0 +1,29 @@
+### 环境变量
+@baseUrl = http://localhost:3000/api
+@captainToken = YOUR_CAPTAIN_TOKEN_HERE
+
+###############################################
+# 七、佣金统计模块 (Commission)
+###############################################
+
+### 7.1 获取佣金概览
+GET {{baseUrl}}/captain/commission/overview
+Authorization: Bearer {{captainToken}}
+
+### 7.2 获取佣金明细列表
+GET {{baseUrl}}/captain/commission/list?page=1&pageSize=10
+Authorization: Bearer {{captainToken}}
+
+### 7.2.1 获取佣金明细列表 - 按日期筛选
+GET {{baseUrl}}/captain/commission/list?page=1&pageSize=10&start_date=2024-01-01&end_date=2024-12-31
+Authorization: Bearer {{captainToken}}
+
+### 7.3 获取佣金趋势（新增接口）
+# 注意：此接口已在路由中定义但可能未在文档中
+GET {{baseUrl}}/captain/commission/trend
+Authorization: Bearer {{captainToken}}
+
+### 7.4 导出佣金数据（新增接口）
+# 注意：此接口已在路由中定义但可能未在文档中
+GET {{baseUrl}}/captain/commission/export
+Authorization: Bearer {{captainToken}}

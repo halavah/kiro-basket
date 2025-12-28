@@ -1,0 +1,11 @@
+# 测试报告
+test-report.json
+test-report.html
+
+# 依赖
+node_modules/
+package-lock.json
+
+# 临时文件
+*.log
+.DS_Store

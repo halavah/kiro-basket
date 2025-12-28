@@ -1,0 +1,151 @@
+name: Deploy to Vercel and Render
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+    branches:
+      - master
+      - main
+  workflow_dispatch:  # 允许手动触发
+
+# 环境变量（可在 GitHub Secrets 中配置）
+env:
+  NODE_VERSION: '18'
+
+jobs:
+  # 检测变更的目录
+  detect-changes:
+    name: 检测变更
+    runs-on: ubuntu-latest
+    outputs:
+      server: ${{ steps.changes.outputs.server }}
+      captain: ${{ steps.changes.outputs.captain }}
+      resident: ${{ steps.changes.outputs.resident }}
+    steps:
+      - name: Checkout 代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 检测文件变更
+        uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            server:
+              - 'server/**'
+            captain:
+              - 'client-captain/**'
+            resident:
+              - 'client-resident/**'
+
+  # 部署后端到 Render
+  deploy-server:
+    name: 部署后端 (Render)
+    needs: detect-changes
+    if: needs.detect-changes.outputs.server == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 代码
+        uses: actions/checkout@v4
+
+      - name: 触发 Render 部署
+        run: |
+          echo "🚀 触发 Render 部署..."
+          if [ -n "${{ secrets.RENDER_DEPLOY_HOOK_URL }}" ]; then
+            curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+            echo "✅ Render 部署已触发"
+          else
+            echo "⚠️  未配置 RENDER_DEPLOY_HOOK_URL，跳过部署"
+            echo "请在 GitHub Secrets 中添加 Render Deploy Hook URL"
+          fi
+
+  # 部署团长端到 Vercel
+  deploy-captain:
+    name: 部署团长端 (Vercel)
+    needs: detect-changes
+    if: needs.detect-changes.outputs.captain == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 代码
+        uses: actions/checkout@v4
+
+      - name: 安装 Vercel CLI
+        run: npm install -g vercel
+
+      - name: 拉取 Vercel 环境信息
+        run: |
+          cd client-captain
+          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: 构建项目
+        run: |
+          cd client-captain
+          vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: 部署到 Vercel
+        run: |
+          cd client-captain
+          vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_CAPTAIN_PROJECT_ID }}
+
+  # 部署居民端到 Vercel
+  deploy-resident:
+    name: 部署居民端 (Vercel)
+    needs: detect-changes
+    if: needs.detect-changes.outputs.resident == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 代码
+        uses: actions/checkout@v4
+
+      - name: 安装 Vercel CLI
+        run: npm install -g vercel
+
+      - name: 拉取 Vercel 环境信息
+        run: |
+          cd client-resident
+          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: 构建项目
+        run: |
+          cd client-resident
+          vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: 部署到 Vercel
+        run: |
+          cd client-resident
+          vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_RESIDENT_PROJECT_ID }}
+
+  # 部署完成通知
+  notify:
+    name: 部署通知
+    needs: [deploy-server, deploy-captain, deploy-resident]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: 生成部署报告
+        run: |
+          echo "📊 部署报告"
+          echo "============================================"
+          echo "后端 (Render):    ${{ needs.deploy-server.result }}"
+          echo "团长端 (Vercel):  ${{ needs.deploy-captain.result }}"
+          echo "居民端 (Vercel):  ${{ needs.deploy-resident.result }}"
+          echo "============================================"
+
+          if [ "${{ needs.deploy-server.result }}" == "failure" ] ||
+             [ "${{ needs.deploy-captain.result }}" == "failure" ] ||
+             [ "${{ needs.deploy-resident.result }}" == "failure" ]; then
+            echo "❌ 部分部署失败"
+            exit 1
+          else
+            echo "✅ 所有部署成功"
+          fi

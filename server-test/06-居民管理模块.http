@@ -1,0 +1,44 @@
+### 环境变量
+@baseUrl = http://localhost:3000/api
+@captainToken = YOUR_CAPTAIN_TOKEN_HERE
+@residentToken = YOUR_RESIDENT_TOKEN_HERE
+
+###############################################
+# 六、居民管理模块 (Resident)
+###############################################
+
+#######################
+# 团长端
+#######################
+
+### 6.1 获取居民列表
+GET {{baseUrl}}/captain/residents?page=1&pageSize=10
+Authorization: Bearer {{captainToken}}
+
+### 6.1.1 获取居民列表 - 关键词搜索
+GET {{baseUrl}}/captain/residents?page=1&pageSize=10&keyword=张三
+Authorization: Bearer {{captainToken}}
+
+### 6.2 获取居民详情
+# 将 :id 替换为居民 ID
+GET {{baseUrl}}/captain/residents/1
+Authorization: Bearer {{captainToken}}
+
+#######################
+# 居民端
+#######################
+
+### 6.3 获取个人信息
+GET {{baseUrl}}/resident/profile
+Authorization: Bearer {{residentToken}}
+
+### 6.4 更新个人信息
+PUT {{baseUrl}}/resident/profile
+Authorization: Bearer {{residentToken}}
+Content-Type: application/json
+
+{
+  "name": "张三",
+  "phone": "13900139001",
+  "address": "1号楼102室"
+}

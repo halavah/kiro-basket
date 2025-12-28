@@ -1,0 +1,46 @@
+### 环境变量
+@baseUrl = http://localhost:3000/api
+@captainToken = YOUR_CAPTAIN_TOKEN_HERE
+
+###############################################
+# 十、文件上传模块 (Upload)
+###############################################
+
+### 10.1 上传文件
+# 注意：文件上传需要使用 multipart/form-data
+# 在 VS Code REST Client 中上传文件的示例：
+#
+# POST {{baseUrl}}/upload
+# Authorization: Bearer {{captainToken}}
+# Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+#
+# ------WebKitFormBoundary7MA4YWxkTrZu0gW
+# Content-Disposition: form-data; name="file"; filename="test.jpg"
+# Content-Type: image/jpeg
+#
+# < ./test-files/test.jpg
+# ------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### 建议使用 Postman 或 Insomnia 测试文件上传
+# 或使用 curl 命令：
+# curl -X POST http://localhost:3000/api/upload \
+#   -H "Authorization: Bearer YOUR_TOKEN" \
+#   -F "file=@/path/to/your/file.jpg"
+
+###############################################
+# 测试说明
+###############################################
+
+# 上传成功后会返回：
+# {
+#   "code": 200,
+#   "message": "上传成功",
+#   "data": {
+#     "url": "/uploads/20240101123456_apple.jpg",
+#     "filename": "20240101123456_apple.jpg",
+#     "originalname": "apple.jpg",
+#     "size": 102400
+#   }
+# }
+#
+# 返回的 url 可以直接用于创建/更新商品的 image 字段

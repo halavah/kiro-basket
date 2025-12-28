@@ -1,0 +1,38 @@
+### 环境变量
+@baseUrl = http://localhost:3000/api
+@captainToken = YOUR_CAPTAIN_TOKEN_HERE
+
+###############################################
+# 八、消息通知模块 (Notification)
+###############################################
+
+### 8.1 获取消息列表
+GET {{baseUrl}}/captain/notifications?page=1&pageSize=20
+Authorization: Bearer {{captainToken}}
+
+### 8.1.1 获取消息列表 - 按类型筛选
+GET {{baseUrl}}/captain/notifications?page=1&pageSize=20&type=stock_alert
+Authorization: Bearer {{captainToken}}
+
+### 8.1.2 获取消息列表 - 只看未读
+GET {{baseUrl}}/captain/notifications?page=1&pageSize=20&is_read=false
+Authorization: Bearer {{captainToken}}
+
+### 8.2 获取未读消息数量（新增接口）
+# 注意：此接口已在路由中定义但可能未在文档中
+GET {{baseUrl}}/captain/notifications/unread-count
+Authorization: Bearer {{captainToken}}
+
+### 8.3 标记消息已读
+# 将 :id 替换为消息 ID (MongoDB ObjectId)
+PATCH {{baseUrl}}/captain/notifications/65a1234567890abcdef12345/read
+Authorization: Bearer {{captainToken}}
+
+### 8.4 删除消息
+# 将 :id 替换为消息 ID
+DELETE {{baseUrl}}/captain/notifications/65a1234567890abcdef12345
+Authorization: Bearer {{captainToken}}
+
+### 8.5 一键已读所有消息
+PATCH {{baseUrl}}/captain/notifications/read-all
+Authorization: Bearer {{captainToken}}

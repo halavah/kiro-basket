@@ -1,0 +1,20 @@
+{
+  "name": "server-test",
+  "version": "1.0.0",
+  "description": "社区团购管理平台 - 服务端 API 自动化测试",
+  "main": "test-runner.js",
+  "scripts": {
+    "test": "node test-runner.js",
+    "test:report": "node test-runner.js && start test-report.html"
+  },
+  "keywords": [
+    "api",
+    "test",
+    "http"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0"
+  }
+}

@@ -1,0 +1,86 @@
+### 环境变量
+@baseUrl = http://localhost:3000/api
+@residentToken = YOUR_RESIDENT_TOKEN_HERE
+
+###############################################
+# 四、购物车模块 (Cart)
+###############################################
+
+### 4.1 获取购物车列表
+GET {{baseUrl}}/resident/cart
+Authorization: Bearer {{residentToken}}
+
+### 4.2 添加商品到购物车
+POST {{baseUrl}}/resident/cart
+Authorization: Bearer {{residentToken}}
+Content-Type: application/json
+
+{
+  "product_id": 1,
+  "quantity": 2
+}
+
+### 4.2.1 添加商品到购物车 - 测试累加
+# 如果购物车已有该商品，数量会累加
+POST {{baseUrl}}/resident/cart
+Authorization: Bearer {{residentToken}}
+Content-Type: application/json
+
+{
+  "product_id": 1,
+  "quantity": 3
+}
+
+### 4.3 更新购物车商品数量
+# 将 :id 替换为购物车项 ID
+PUT {{baseUrl}}/resident/cart/1
+Authorization: Bearer {{residentToken}}
+Content-Type: application/json
+
+{
+  "quantity": 5
+}
+
+### 4.4 删除购物车商品
+# 将 :id 替换为购物车项 ID
+DELETE {{baseUrl}}/resident/cart/1
+Authorization: Bearer {{residentToken}}
+
+### 4.5 清空购物车
+DELETE {{baseUrl}}/resident/cart
+Authorization: Bearer {{residentToken}}
+
+###############################################
+# 测试场景
+###############################################
+
+### 测试：添加多个不同商品
+POST {{baseUrl}}/resident/cart
+Authorization: Bearer {{residentToken}}
+Content-Type: application/json
+
+{
+  "product_id": 2,
+  "quantity": 1
+}
+
+###
+
+POST {{baseUrl}}/resident/cart
+Authorization: Bearer {{residentToken}}
+Content-Type: application/json
+
+{
+  "product_id": 3,
+  "quantity": 4
+}
+
+### 测试：库存不足
+POST {{baseUrl}}/resident/cart
+Authorization: Bearer {{residentToken}}
+Content-Type: application/json
+
+{
+  "product_id": 1,
+  "quantity": 999999
+}

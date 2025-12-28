@@ -1,0 +1,122 @@
+### 环境变量
+@baseUrl = http://localhost:3000/api
+@captainToken = YOUR_CAPTAIN_TOKEN_HERE
+@residentToken = YOUR_RESIDENT_TOKEN_HERE
+
+###############################################
+# 五、订单模块 (Order)
+###############################################
+
+#######################
+# 居民端
+#######################
+
+### 5.1 创建订单
+# 先添加商品到购物车，获取购物车项 ID
+POST {{baseUrl}}/resident/orders
+Authorization: Bearer {{residentToken}}
+Content-Type: application/json
+
+{
+  "cart_ids": [1, 2],
+  "address": "1号楼101室",
+  "remark": "请轻拿轻放"
+}
+
+### 5.2 获取订单列表（居民端）
+GET {{baseUrl}}/resident/orders?page=1&pageSize=10
+Authorization: Bearer {{residentToken}}
+
+### 5.2.1 获取订单列表 - 按状态筛选
+GET {{baseUrl}}/resident/orders?page=1&pageSize=10&status=0
+Authorization: Bearer {{residentToken}}
+
+### 5.3 获取订单详情（居民端）
+# 将 :id 替换为订单 ID
+GET {{baseUrl}}/resident/orders/1
+Authorization: Bearer {{residentToken}}
+
+### 5.4 取消订单（居民端）
+# 将 :id 替换为订单 ID
+PATCH {{baseUrl}}/resident/orders/9/cancel
+Authorization: Bearer {{residentToken}}
+
+#######################
+# 团长端
+#######################
+
+### 5.5 获取订单列表（团长端）
+GET {{baseUrl}}/captain/orders?page=1&pageSize=10
+Authorization: Bearer {{captainToken}}
+
+### 5.5.1 获取订单列表 - 按状态筛选
+GET {{baseUrl}}/captain/orders?page=1&pageSize=10&status=0
+Authorization: Bearer {{captainToken}}
+
+### 5.5.2 获取订单列表 - 关键词搜索
+GET {{baseUrl}}/captain/orders?page=1&pageSize=10&keyword=张三
+Authorization: Bearer {{captainToken}}
+
+### 5.6 获取订单详情（团长端）
+GET {{baseUrl}}/captain/orders/1
+Authorization: Bearer {{captainToken}}
+
+### 5.7 确认订单
+# 状态：待确认(0) → 配送中(1)
+PATCH {{baseUrl}}/captain/orders/9/confirm
+Authorization: Bearer {{captainToken}}
+
+### 5.8 完成订单
+# 状态：配送中(1) → 已完成(2)
+PATCH {{baseUrl}}/captain/orders/7/complete
+Authorization: Bearer {{captainToken}}
+
+### 5.9 取消订单（团长端）
+PATCH {{baseUrl}}/captain/orders/10/cancel
+Authorization: Bearer {{captainToken}}
+Content-Type: application/json
+
+{
+  "reason": "商品缺货"
+}
+
+###############################################
+# 完整订单流程测试
+###############################################
+
+### 步骤1：居民添加商品到购物车
+POST {{baseUrl}}/resident/cart
+Authorization: Bearer {{residentToken}}
+Content-Type: application/json
+
+{
+  "product_id": 1,
+  "quantity": 2
+}
+
+### 步骤2：查看购物车，获取 cart_ids
+GET {{baseUrl}}/resident/cart
+Authorization: Bearer {{residentToken}}
+
+### 步骤3：创建订单
+POST {{baseUrl}}/resident/orders
+Authorization: Bearer {{residentToken}}
+Content-Type: application/json
+
+{
+  "cart_ids": [1],
+  "address": "测试地址",
+  "remark": "测试订单"
+}
+
+### 步骤4：团长查看待确认订单
+GET {{baseUrl}}/captain/orders?status=0
+Authorization: Bearer {{captainToken}}
+
+### 步骤5：团长确认订单
+PATCH {{baseUrl}}/captain/orders/ORDER_ID/confirm
+Authorization: Bearer {{captainToken}}
+
+### 步骤6：团长完成订单
+PATCH {{baseUrl}}/captain/orders/ORDER_ID/complete
+Authorization: Bearer {{captainToken}}

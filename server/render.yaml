@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: kiro-basket-server
+    env: node
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm run prod
+    autoDeploy: true

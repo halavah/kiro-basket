@@ -1,0 +1,36 @@
+### 环境变量
+@baseUrl = http://localhost:3000/api
+@captainToken = YOUR_CAPTAIN_TOKEN_HERE
+
+###############################################
+# 九、数据看板模块 (Dashboard)
+###############################################
+
+### 9.1 获取核心指标
+GET {{baseUrl}}/captain/dashboard/stats
+Authorization: Bearer {{captainToken}}
+
+### 9.2 获取销售趋势数据
+GET {{baseUrl}}/captain/dashboard/sales-trend
+Authorization: Bearer {{captainToken}}
+
+### 9.2.1 获取销售趋势数据 - 指定天数
+GET {{baseUrl}}/captain/dashboard/sales-trend?days=30
+Authorization: Bearer {{captainToken}}
+
+### 9.3 获取订单状态分布
+GET {{baseUrl}}/captain/dashboard/order-status
+Authorization: Bearer {{captainToken}}
+
+### 9.4 获取商品销售排行
+GET {{baseUrl}}/captain/dashboard/top-products
+Authorization: Bearer {{captainToken}}
+
+### 9.4.1 获取商品销售排行 - 指定数量
+GET {{baseUrl}}/captain/dashboard/top-products?limit=10
+Authorization: Bearer {{captainToken}}
+
+### 9.5 获取库存预警（新增接口）
+# 注意：此接口已在路由中定义但可能未在文档中
+GET {{baseUrl}}/captain/dashboard/stock-alerts
+Authorization: Bearer {{captainToken}}

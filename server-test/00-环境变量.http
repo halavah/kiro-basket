@@ -1,0 +1,25 @@
+### 环境配置说明
+# 社区团购管理平台 - API 测试文件
+#
+# 使用方法：
+# 1. 安装 VS Code 插件：REST Client
+# 2. 或使用 IntelliJ IDEA / WebStorm 直接运行
+# 3. 点击 "Send Request" 即可发送请求
+#
+# 变量说明：
+# - {{baseUrl}} - API 基础地址
+# - {{captainToken}} - 团长端 JWT Token
+# - {{residentToken}} - 居民端 JWT Token
+
+### 环境变量定义
+@baseUrl = http://localhost:3000/api
+@captainUsername = admin
+@captainPassword = 123456
+@residentUsername = zhangsan
+@residentPassword = 123456
+
+### 说明
+# 先执行 01-认证模块.http 中的登录请求获取 Token
+# 然后将 Token 复制到下面的变量中
+@captainToken =
+@residentToken =
