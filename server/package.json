@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "node app-dev.js",
     "prod": "node app-prod.js",
+    "render": "node app-render.js",
     "start": "nodemon app.js"
   },
   "keywords": [

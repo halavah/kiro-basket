@@ -99,11 +99,15 @@ show_menu() {
     echo -e "     ${PURPLE}→${NC} 初始化 MySQL 和 MongoDB 数据库（开发环境）"
     echo ""
 
-    echo -e "${GREEN}  5.${NC} 🗄️  ${BLUE}初始化生产数据库${NC}   (server-init-prod.sh)"
-    echo -e "     ${PURPLE}→${NC} 初始化 MySQL 和 MongoDB 数据库（生产环境）"
+    echo -e "${GREEN}  5.${NC} 🗄️  ${BLUE}初始化生产数据库（腾讯云）${NC}   (server-init-prod.sh)"
+    echo -e "     ${PURPLE}→${NC} 初始化腾讯云 MySQL 和 MongoDB 数据库"
     echo ""
 
-    echo -e "${GREEN}  6.${NC} 🧪 ${BLUE}运行 API 测试${NC}     (test-api.sh)"
+    echo -e "${GREEN}  6.${NC} 🗄️  ${BLUE}初始化 Render 数据库${NC}   (server-init-render.sh)"
+    echo -e "     ${PURPLE}→${NC} 初始化 Render 平台 MySQL 和 MongoDB 数据库"
+    echo ""
+
+    echo -e "${GREEN}  7.${NC} 🧪 ${BLUE}运行 API 测试${NC}     (test-api.sh)"
     echo -e "     ${PURPLE}→${NC} 执行服务端 API 自动化测试"
     echo ""
 
@@ -125,7 +129,7 @@ main() {
         # 重置 choice 变量，避免保留上次的输入
         choice=""
 
-        echo -ne "${YELLOW}请选择操作 [1-6,9] (默认: 1 - 启动后端):${NC} "
+        echo -ne "${YELLOW}请选择操作 [1-7,9] (默认: 1 - 启动后端):${NC} "
         read -r choice
 
         # 如果用户直接按回车，默认选择 1 (启动后端)
@@ -153,11 +157,16 @@ main() {
                 ;;
 
             5)
-                print_header "执行: 初始化生产数据库"
+                print_header "执行: 初始化生产数据库（腾讯云）"
                 run_script "server-init-prod.sh"
                 ;;
 
             6)
+                print_header "执行: 初始化 Render 数据库"
+                run_script "server-init-render.sh"
+                ;;
+
+            7)
                 print_header "执行: 运行 API 测试"
                 run_script "test-api.sh"
                 ;;

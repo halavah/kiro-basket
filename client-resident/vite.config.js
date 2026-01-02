@@ -11,21 +11,21 @@ export default defineConfig({
     }
   },
   server: {
-    port: 5174,
+    port: 20302,
     open: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: 'http://localhost:20300',
         changeOrigin: true
         // 注释说明：
         // 前端 API 文件中的路径已经包含 /resident 前缀
         // 例如：/resident/products, /resident/cart 等
         // baseURL 是 /api，所以完整路径是 /api/resident/products
-        // Vite 代理会转发到 http://localhost:3000/api/resident/products
+        // Vite 代理会转发到 http://localhost:20300/api/resident/products
         // 这样就正确匹配后端路由了 ✅
       },
       '/uploads': {
-        target: 'http://localhost:3000',
+        target: 'http://localhost:20300',
         changeOrigin: true
       }
     }

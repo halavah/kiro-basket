@@ -30,10 +30,13 @@ function Show-Menu {
     Write-Host "   4. 🗄️  初始化开发数据库   (server-init-dev.ps1)"
     Write-Host "      -> 初始化 MySQL 和 MongoDB 数据库（开发环境）"
     Write-Host ""
-    Write-Host "   5. 🗄️  初始化生产数据库   (server-init-prod.ps1)"
-    Write-Host "      -> 初始化 MySQL 和 MongoDB 数据库（生产环境）"
+    Write-Host "   5. 🗄️  初始化生产数据库（腾讯云）   (server-init-prod.ps1)"
+    Write-Host "      -> 初始化腾讯云 MySQL 和 MongoDB 数据库"
     Write-Host ""
-    Write-Host "   6. 🧪 运行 API 测试     (test-api.ps1)"
+    Write-Host "   6. 🗄️  初始化 Render 数据库   (server-init-render.ps1)"
+    Write-Host "      -> 初始化 Render 平台 MySQL 和 MongoDB 数据库"
+    Write-Host ""
+    Write-Host "   7. 🧪 运行 API 测试     (test-api.ps1)"
     Write-Host "      -> 执行服务端 API 自动化测试"
     Write-Host ""
     Write-Host "==============================================================="
@@ -46,7 +49,7 @@ function Show-Menu {
 
 while ($true) {
     Show-Menu
-    $choice = Read-Host "请选择操作 [1-6,9] (默认: 1 - 启动后端)"
+    $choice = Read-Host "请选择操作 [1-7,9] (默认: 1 - 启动后端)"
 
     if ([string]::IsNullOrWhiteSpace($choice)) { $choice = "1" }
 
@@ -81,12 +84,19 @@ while ($true) {
         }
         "5" {
             Write-Host "`n============================================================"
-            Write-Host "   执行: 初始化生产数据库"
+            Write-Host "   执行: 初始化生产数据库（腾讯云）"
             Write-Host "============================================================`n"
             & "$BinDir/server-init-prod.ps1"
             Read-Host "Press Enter to return to menu..."
         }
         "6" {
+            Write-Host "`n============================================================"
+            Write-Host "   执行: 初始化 Render 数据库"
+            Write-Host "============================================================`n"
+            & "$BinDir/server-init-render.ps1"
+            Read-Host "Press Enter to return to menu..."
+        }
+        "7" {
             Write-Host "`n============================================================"
             Write-Host "   执行: 运行 API 测试"
             Write-Host "============================================================`n"
